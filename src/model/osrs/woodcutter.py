@@ -73,7 +73,7 @@ class OSRSWoodcutter(OSRSBot):
                 self.take_break(max_seconds=3)
                 cyan_tile = self.get_nearest_tag(clr.CYAN)
                 self.mouse.move_to(cyan_tile.random_point())
-                pag.click()
+                self.mouse.click()
 
                 #running to bank
                 while not api_m.get_is_player_idle():
@@ -111,7 +111,7 @@ class OSRSWoodcutter(OSRSBot):
                         break
                     self.log_msg("Clicking tree...")
                     print("click!")
-                    pag.click()
+                    self.mouse.click()
                     time.sleep(1)
                     failed_searches = 0
                     break
