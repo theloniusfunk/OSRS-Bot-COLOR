@@ -7,7 +7,7 @@ import tkinter as tk
 from pathlib import Path
 from tkinter import filedialog
 
-import psutil
+#import psutil
 
 runelite_settings_folder: Path = Path(__file__).parent.parent.joinpath("runelite_settings")
 executable_paths: str = str(runelite_settings_folder.joinpath("executable_paths.json"))
