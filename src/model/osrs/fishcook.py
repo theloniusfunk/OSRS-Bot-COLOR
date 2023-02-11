@@ -70,7 +70,7 @@ class OSRSFishCook(OSRSBot):
                         print("not idle - running")
                     print("idle - fire") 
                     pag.press("space")
-                    #search for specific fish to cook 
+                    #search for specific fish to cook, OUTDATED
                     #if Cook_Trout:= imsearch.search_img_in_rect(imsearch.BOT_IMAGES.joinpath("items", "Cook_Trout.png"), self.win.chat, 0.05):
                      #   print("cook trout")
                      #   self.mouse.move_to(Cook_Trout.random_point())
