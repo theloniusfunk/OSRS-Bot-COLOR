@@ -55,6 +55,9 @@ class OSRSSmelter(OSRSBot):
         # Main loop
         start_time = time.time()
         end_time = self.running_time * 60
+
+        gate = 0;
+
         while time.time() - start_time < end_time:
             
             # Clicks on Furnace
@@ -62,31 +65,35 @@ class OSRSSmelter(OSRSBot):
                 if result := ocr.find_text("Ring of Forging", self.win.chat, ocr.PLAIN_12, clr.PURPLE):
                     print("Ring MELTED")
                     break
+                elif not api_s.get_player_equipment():
+                    print("Ring MELTED")
+                    break
                 else: 
                     self.__move_mouse_to_furnace()
-                    self.mouse.click()
-                    self.take_break(max_seconds=1) 
+                    self.walkrun(20) #20 energy or higher
                     #running to furnace
                     while not api_m.get_is_player_idle():
                         time.sleep(1)
                         print("not idle - running")
                     print("idle - at furnace")
                     pag.press("space")
+                    gate = 0;
                     while not api_m.get_is_player_idle():
                         time.sleep(2)
                         print("not idle - smelting")
                     print("idle")
 
-            print("Go to Bank")
-            self.take_break(max_seconds=3)
-            cyan_tile = self.get_nearest_tag(clr.CYAN)
-            self.mouse.move_to(cyan_tile.random_point())
-            self.mouse.click()
-            #running to bank
-            while not api_m.get_is_player_idle():
-                time.sleep(1)
-                print("not idle - running")
-            print("idle - at bank")
+            if gate == 0:
+                print("Go to Bank")
+                self.take_break(max_seconds=2)
+                cyan_tile = self.get_nearest_tag(clr.CYAN)
+                self.mouse.move_to(cyan_tile.random_point())
+                self.walkrun(20) #20 energy or higher
+                    #running to bank
+                while not api_m.get_is_player_idle():
+                    time.sleep(1)
+                    print("not idle - running")
+                print("idle - at bank")
 
             if DepositAll:= imsearch.search_img_in_rect(imsearch.BOT_IMAGES.joinpath("bank", "DepositAll.png"), self.win.game_view, 0.05):
                 if api_s.get_inv():
@@ -134,8 +141,11 @@ class OSRSSmelter(OSRSBot):
                 time.sleep(random.uniform(0.32, 0.5))
             """
             # Escape key out of bank menu
-            pag.press("esc")
-            time.sleep(random.uniform(0.68, 1.12))
+            if gate == 0:
+                pag.press("esc")
+                print("escape")
+                gate = 1;
+            time.sleep(random.uniform(0.21, 0.31))
 
             self.update_progress((time.time() - start_time) / end_time)
 
@@ -183,9 +193,23 @@ class OSRSSmelter(OSRSBot):
 
     def __equip_rof(self):
         rof = self.mouse.move_to(self.win.inventory_slots[0].random_point())
+        time.sleep(random.uniform(0.132, 0.344))
         pag.keyDown("shift")
+        time.sleep(random.uniform(0.132, 0.344))
         self.mouse.click()
+        time.sleep(random.uniform(0.135, 0.333))
         pag.keyUp("shift")
+        return True
+    
+    def walkrun(self, energy):
+        if self.get_run_energy() > energy:
+                    pag.keyDown("ctrl")
+                    time.sleep(random.uniform(0.132, 0.344))
+                    self.mouse.click()
+                    time.sleep(random.uniform(0.135, 0.333))
+                    pag.keyUp("ctrl")
+        else:
+            self.mouse.click()
         return True
 
     """def __anti_ban(self):
