@@ -58,7 +58,7 @@ class OSRSSmither(OSRSBot):
         while time.time() - start_time < end_time:
             
             # Clicks on Furnace
-            while api_s.get_inv_item_indices(ids.IRON_BAR):
+            while api_s.get_inv_item_indices(ids.STEEL_BAR):
                     self.__move_mouse_to_anvil()
                     self.walkrun(10) #10 energy or higher
                     #running to anvil
@@ -118,8 +118,8 @@ class OSRSSmither(OSRSBot):
         return True
 
     def __move_mouse_to_bar_1(self):
-        iron_bar = self.get_all_tagged_in_rect(self.win.game_view, clr.GREEN)
-        self.mouse.move_to(iron_bar[0].random_point())
+        bank_bar = self.get_all_tagged_in_rect(self.win.game_view, clr.GREEN)
+        self.mouse.move_to(bank_bar[0].random_point())
         return True
     
     def walkrun(self, energy):
