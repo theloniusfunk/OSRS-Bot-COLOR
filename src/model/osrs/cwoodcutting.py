@@ -54,42 +54,46 @@ class OSRSWoodcutting(OSRSBot):
         
         
         while time.time() - start_time < end_time:
-            # 5% chance to take a break between tree searches
-            if rd.random_chance(probability=0.05) and self.take_breaks:
-                self.take_break(max_seconds=30, fancy=True)
-
-                """ # 2% chance to drop logs early
-                if rd.random_chance(probability=0.02):
-                self.__drop_logs(api_s)
-
-                # If inventory is full, drop logs
-                if api_s.get_is_inv_full():
-                self.__drop_logs(api_s) """
             
             print("check if inv full")
             # If inventory is full, go bank
             if api_s.get_is_inv_full():
                 print("inv full")
-                self.take_break(max_seconds=3)
-                cyan_tile = self.get_nearest_tag(clr.CYAN)
-                self.mouse.move_to(cyan_tile.random_point())
-                self.mouse.click()
+                if rd.random_chance(probability=0.02) and self.take_breaks:
+                    self.take_break(max_seconds=700, fancy=True)
+
+                    """ # 2% chance to drop logs early
+                    if rd.random_chance(probability=0.02):
+                    self.__drop_logs(api_s)
+
+                    # If inventory is full, drop logs
+                    if api_s.get_is_inv_full():
+                    self.__drop_logs(api_s) """
+                self.drop_all()
+                time.sleep(0.5)
+                # 5% chance to take a break between tree searches
+                
+            
+                #self.take_break(max_seconds=3)
+                #cyan_tile = self.get_nearest_tag(clr.CYAN)
+                #self.mouse.move_to(cyan_tile.random_point())
+                #self.mouse.click()
 
                 #running to bank
-                while not api_m.get_is_player_idle():
-                    time.sleep(0.5)
-                    print("not idle - running")
-                print("idle - at bank")    
+                #while not api_m.get_is_player_idle():
+                #    time.sleep(0.5)
+                #    print("not idle - running")
+                #print("idle - at bank")    
                 #self.take_break(max_seconds=1)
 
-                if DepositAll:= imsearch.search_img_in_rect(imsearch.BOT_IMAGES.joinpath("bank", "DepositAll.png"), self.win.game_view, 0.05):
-                    print("deposit all")
-                    self.mouse.move_to(DepositAll.random_point())
-                    self.mouse.click()
-                    self.take_break(max_seconds=1)
-                    print("close bank")
-                    pag.press('esc')
-                    time.sleep(0.1)
+                #if DepositAll:= imsearch.search_img_in_rect(imsearch.BOT_IMAGES.joinpath("bank", "DepositAll.png"), self.win.game_view, 0.05):
+                #    print("deposit all")
+                #    self.mouse.move_to(DepositAll.random_point())
+                #    self.mouse.click()
+                #    self.take_break(max_seconds=1)
+                #    print("close bank")
+                #    pag.press('esc')
+                #    time.sleep(0.1)
 
             while not self.is_player_doing_action("Woodcutting"):
                 #self.take_break(max_seconds=1)

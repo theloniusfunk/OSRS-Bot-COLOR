@@ -69,7 +69,7 @@ class OSRSFishing(OSRSBot):
         while time.time() - start_time < end_time:
             # Check to drop inventory
             if api_s.get_is_inv_full():
-                self.take_break(max_seconds=3)
+                self.take_break(max_seconds=1)
                 #rd.sleep_random(1.2,2)
                 self.drop_all(skip_slots=list(range(self.protect_slots)))
                 fished += 28 - self.protect_slots
@@ -99,7 +99,7 @@ class OSRSFishing(OSRSBot):
                 time.sleep(1)
                 print("not idle")
             print("idle")    
-            time.sleep(3)
+            time.sleep(2)
 
             # Update progress
             self.update_progress((time.time() - start_time) / end_time)

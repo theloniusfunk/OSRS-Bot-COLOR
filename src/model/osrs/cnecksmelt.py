@@ -150,12 +150,12 @@ class OSRSNecksmelt(OSRSBot):
         self.mouse.click()
         return True
     def __move_mouse_to_item1(self):
-        iron_ore = self.get_all_tagged_in_rect(self.win.game_view, clr.GREEN)
-        self.mouse.move_to(iron_ore[0].random_point())
+        green = self.get_all_tagged_in_rect(self.win.game_view, clr.GREEN)
+        self.mouse.move_to(green[0].random_point())
         return True
     def __move_mouse_to_item2(self):
-        iron_ore = self.get_all_tagged_in_rect(self.win.game_view, clr.RED)
-        self.mouse.move_to(iron_ore[0].random_point())
+        red = self.get_all_tagged_in_rect(self.win.game_view, clr.RED)
+        self.mouse.move_to(red[0].random_point())
         return True
     def walkrun(self, energy):
         if self.get_run_energy() > energy:
