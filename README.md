@@ -9,37 +9,7 @@ OS Bot COLOR (OSBC) is a desktop client for controlling and monitoring automatio
 📹 Subscribe to [Kell's Code](https://www.youtube.com/@KellsCode/featured) on YouTube for updates and tutorials
 
 ⭐ If you like this project, please leave a Star :)
-<<<<<<< HEAD
-
-<p>
-  <a href="https://www.buymeacoffee.com/kelltom" target="_blank">
-    <img src="https://i.imgur.com/5X29MVY.png" alt="Buy Me A Coffee" height="60dp">
-  </a>
-  &nbsp;&nbsp;&nbsp;
-  <a href="https://www.paypal.com/paypalme/kelltom" target="_blank">
-    <img src="https://i.imgur.com/6EFKj2m.png" alt="PayPal" height="60dp">
-  </a>
-</p>
-
-# Table of Contents
-- [Developer Setup ](#developer-setup-)
-- [Documentation](#documentation)
-- [Features](#features)
-  - [User Interface](#user-interface)
-    - [Script Log](#script-log)
-    - [Simple Option Menus](#simple-option-menus)
-  - [RuneLite Launcher](#runelite-launcher)
-  - [Any Client Size, Anywhere](#any-client-size-anywhere)
-  - [Human-like Mouse Movement](#human-like-mouse-movement)
-  - [RuneLite Leverage](#runelite-leverage)
-    - [Object Detection](#object-detection)
-    - [API](#api)
-  - [Random Click Distribution](#random-click-distribution)
-  - [Efficient Image Searching](#efficient-image-searching)
-  - [Lightning Fast Optical Character Recognition](#lightning-fast-optical-character-recognition)
-=======
  -->
->>>>>>> 8cd24128c69bd855572912d41ef2380d27ea1276
 
 # Developer Setup <img height=20 src="documentation/media/windows_logo.png"/>
 1. Install [Python 3.10](https://www.python.org/downloads/release/python-3109/) *(not compatible with other major versions)*
@@ -95,9 +65,6 @@ Sometimes, your bot might need to find a specific image on screen. We've modifie
 ## Lightning Fast Optical Character Recognition
 We've ditched machine learned OCR in favor of a much faster and more reliable custom implementation. OSBC can locate text on screen in as little as **2 milliseconds**. That's **0.002 seconds**.
 
-<<<<<<< HEAD
-![ocr](https://user-images.githubusercontent.com/44652363/206808982-16f58a50-4709-4c27-9fc2-94b0c4edab21.png)
-=======
 ---
 
 <p>
@@ -105,4 +72,6 @@ We've ditched machine learned OCR in favor of a much faster and more reliable cu
     <img src="https://i.imgur.com/5X29MVY.png" alt="Buy Me A Coffee" height="60dp">
   </a>
 </p>
->>>>>>> 8cd24128c69bd855572912d41ef2380d27ea1276
+=========
+![ocr](https://user-images.githubusercontent.com/44652363/206808982-16f58a50-4709-4c27-9fc2-94b0c4edab21.png)
+>>>>>>>>> Temporary merge branch 2

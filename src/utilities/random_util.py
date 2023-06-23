@@ -158,8 +158,6 @@ def fancy_normal_sample(lower_bound, upper_bound) -> float:
     return truncated_normal_sample(lower_bound, upper_bound, mean=mean)
 
 
-<<<<<<< HEAD
-=======
 def chisquared_sample(df: int, min: float = 0, max: float = np.inf) -> float:
     """
     Generate a random sample from a Chisquared distribution. Contraining the maximum will produce abnormal means.
@@ -184,7 +182,6 @@ def chisquared_sample(df: int, min: float = 0, max: float = np.inf) -> float:
             return x
 
 
->>>>>>> 8cd24128c69bd855572912d41ef2380d27ea1276
 def random_chance(probability: float) -> bool:
     """
     Returns true or false based on a probability.
@@ -204,12 +201,6 @@ def random_chance(probability: float) -> bool:
 if __name__ == "__main__":
     import matplotlib.pyplot as plt
 
-<<<<<<< HEAD
-    samples = [truncated_normal_sample(0, 600) for _ in range(100000)]
-
-    # plot the samples
-    plt.hist(samples, bins=600)
-=======
     # Truncated normal distribution
     samples = [truncated_normal_sample(lower_bound=0, upper_bound=100) for _ in range(100000)]
     print("Truncated normal distribution")
@@ -240,5 +231,4 @@ if __name__ == "__main__":
     print(f"Minimum output = {min(samples)}")
     plt.hist(samples, bins=600)
     plt.title("Chi-squared distribution")
->>>>>>> 8cd24128c69bd855572912d41ef2380d27ea1276
     plt.show()

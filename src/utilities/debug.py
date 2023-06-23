@@ -56,18 +56,6 @@ def timer(func):
     Args:
         func: The function to time.
     """
-<<<<<<< HEAD
-
-    def wrapper(*args, **kwargs):
-        start = time.time_ns() // 1_000_000
-        result = func(*args, **kwargs)
-        end = time.time_ns() // 1_000_000
-        print(f"`{func.__name__}` took {round(end - start, 2)} ms.")
-        return result
-
-    return wrapper
-=======
->>>>>>> 8cd24128c69bd855572912d41ef2380d27ea1276
 
     def wrapper(*args, **kwargs):
         start = time.time_ns() // 1_000_000

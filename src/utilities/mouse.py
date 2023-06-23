@@ -1,15 +1,3 @@
-<<<<<<< HEAD
-import random as rd
-import time
-
-import numpy as np
-import pyautogui as pag
-import pytweening
-from deprecated import deprecated
-from pyclick import HumanCurve
-
-import utilities.color as clr
-=======
 import time
 
 import mss
@@ -20,7 +8,6 @@ from pyclick import HumanCurve
 
 import utilities.debug as debug
 import utilities.imagesearch as imsearch
->>>>>>> 8cd24128c69bd855572912d41ef2380d27ea1276
 from utilities.geometry import Point, Rectangle
 from utilities.random_util import truncated_normal_sample
 
@@ -88,16 +75,6 @@ class Mouse:
             y += round(truncated_normal_sample(-y_var, y_var))
         self.move_to((pag.position()[0] + x, pag.position()[1] + y), **kwargs)
 
-<<<<<<< HEAD
-    def click(self, button="left", force_delay=False) -> bool:
-        """
-        Clicks on the current mouse position.
-        Args:
-            button: button to click (default left)
-            with_delay: whether to add a random delay between mouse down and mouse up (default True)
-        """
-        pag.mouseDown(button=button)
-=======
     def click(self, button="left", force_delay=False, check_red_click=False) -> tuple:
         """
         Clicks on the current mouse position.
@@ -112,52 +89,19 @@ class Mouse:
         mouse_pos_before = pag.position()
         pag.mouseDown(button=button)
         mouse_pos_after = pag.position()
->>>>>>> 8cd24128c69bd855572912d41ef2380d27ea1276
         if force_delay or self.click_delay:
             LOWER_BOUND_CLICK = 0.03  # Milliseconds
             UPPER_BOUND_CLICK = 0.2  # Milliseconds
             AVERAGE_CLICK = 0.06  # Milliseconds
             time.sleep(truncated_normal_sample(LOWER_BOUND_CLICK, UPPER_BOUND_CLICK, AVERAGE_CLICK))
         pag.mouseUp(button=button)
-<<<<<<< HEAD
-=======
         if check_red_click:
             return self.__is_red_click(mouse_pos_before, mouse_pos_after)
->>>>>>> 8cd24128c69bd855572912d41ef2380d27ea1276
 
     def right_click(self, force_delay=False):
         """
         Right-clicks on the current mouse position. This is a wrapper for click(button="right").
         Args:
-<<<<<<< HEAD
-            with_delay: whether to add a random delay between mouse down and mouse up (default True)
-        """
-        self.click(button="right", force_delay=force_delay)
-
-    @deprecated(version="0.2.0", reason="Currently unreliable. Use click() instead.")
-    def click_with_check(self) -> bool:
-        """
-        Clicks on the current mouse position and checks if the click was red.
-        Returns:
-            True if the click was red, False if the click was yellow.
-        """
-        self.click()
-        return self.__is_red_click()
-
-    @deprecated(version="0.2.0", reason="This function should instead perform image search using official click sprites.")
-    def __is_red_click(self) -> bool:
-        """
-        Checks if a click was red, must be called directly after clicking.
-        Returns:
-            True if the click was red, False if the click was yellow.
-        """
-        mouse_x, mouse_y = pag.position()
-        # Make rect around cursor for screenshot
-        mouse_rect = Rectangle.from_points(Point(mouse_x - 5, mouse_y - 5), Point(mouse_x + 5, mouse_y + 5))
-        # Isolate red click from screenshot
-        mouse_red_click = clr.isolate_colors(mouse_rect.screenshot(), clr.RED)
-        return np.any(mouse_red_click)
-=======
             with_delay: whether to add a random delay between mouse down and mouse up (default True).
         """
         self.click(button="right", force_delay=force_delay)
@@ -202,17 +146,12 @@ class Mouse:
                 print("Failed to take screenshot of mouse cursor. Please report this error to the developer.")
                 continue
         return False
->>>>>>> 8cd24128c69bd855572912d41ef2380d27ea1276
 
     def __calculate_knots(self, destination: tuple):
         """
         Calculate the knots to use in the Bezier curve based on distance.
         Args:
-<<<<<<< HEAD
-            destination: x, y tuple of the destination point
-=======
             destination: x, y tuple of the destination point.
->>>>>>> 8cd24128c69bd855572912d41ef2380d27ea1276
         """
         # Calculate the distance between the start and end points
         distance = np.sqrt((destination[0] - pag.position()[0]) ** 2 + (destination[1] - pag.position()[1]) ** 2)
