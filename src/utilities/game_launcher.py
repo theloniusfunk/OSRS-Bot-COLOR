@@ -8,7 +8,7 @@ from pathlib import Path
 from tkinter import filedialog
 from typing import Callable, Union
 
-import psutil
+#import psutil
 
 # Path to the folder containing the RuneLite settings files.
 RL_SETTINGS_FOLDER_PATH: Path = Path(__file__).parent.parent.joinpath("runelite_settings")
