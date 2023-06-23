@@ -207,7 +207,9 @@ class MorgHTTPSocket:
         data = self.__do_get(endpoint=self.events_endpoint)
         return int(data["game tick"]) if "game tick" in data else -1
 
-    def get_player_position(self) -> Tuple[int, int, int]:
+        return int(data["game tick"])
+
+    def get_player_position(self) -> Union[SocketError, Tuple[int, int, int]]:
         """
         Fetches the world point of a player.
         Returns:
@@ -295,16 +297,19 @@ class MorgHTTPSocket:
         Returns:
                 True if the item is in the inventory, False if not.
         """
-        data = self.__do_get(endpoint=self.inv_endpoint)
-        if isinstance(item_id, int):
-            return any(inventory_slot["id"] == item_id for inventory_slot in data)
-        elif isinstance(item_id, list):
-            return any(inventory_slot["id"] in item_id for inventory_slot in data)
+        try:
+            data = self.__do_get(endpoint=self.inv_endpoint)
+        except SocketError as e:
+            print(e)
+            return None
+
+        return any(inventory_slot["id"] == item_id for inventory_slot in data)
 
     def get_inv_item_indices(self, item_id: Union[List[int], int]) -> list:
         """
         For the given item ID(s), returns a list of inventory slot indexes that the item exists in.
-        Useful for locating items you do not want to drop.
+        Useful for locating items you do not want to drop. If you want to locate an item in your
+        inventory, consider using :meth:`MorgHTTPSocket.get_first_occurrence()` instead.
         Args:
                 item_id: The item ID to search for (an single ID, or list of IDs).
         Returns:
@@ -316,7 +321,13 @@ class MorgHTTPSocket:
         elif isinstance(item_id, list):
             return [i for i, inventory_slot in enumerate(data) if inventory_slot["id"] in item_id]
 
-    def get_inv_item_stack_amount(self, item_id: Union[int, List[int]]) -> int:
+        if isinstance(id, int):
+            return [i for i, inventory_slot in enumerate(data) if inventory_slot["id"] == id]
+        elif isinstance(id, list):
+            return [i for i, inventory_slot in enumerate(data) if inventory_slot["id"] in id]
+
+    @deprecated(reason="This function needs to be rewritten, as one item can't be stacked in multiple slots. Consider get_inv_item_indices instead.")
+    def find_item_in_inv(self, item_id: int) -> Union[List[Tuple[int, int]], None]:
         """
         For the given item ID, returns the total amount of that item in your inventory.
         This is only useful for items that stack (e.g. coins, runes, etc).
@@ -326,22 +337,28 @@ class MorgHTTPSocket:
         Returns:
             The total amount of that item in your inventory.
         """
-        data = self.__do_get(endpoint=self.inv_endpoint)
-        if isinstance(item_id, int):
-            item_id = [item_id]
-        if result := next((item for item in data if item["id"] in item_id), None):
-            return int(result["quantity"])
-        return 0
+        try:
+            data = self.__do_get(endpoint=self.inv_endpoint)
+        except SocketError as e:
+            print(e)
+            return None
 
-    def get_player_equipment(self) -> Union[List[int], None]:
-        """
-        Currently just gets the ID of the equipment until there is an easier way to convert ID to readable name
-        -1 = nothing
-        Returns: [helmet, cape, neck, weapon, chest, shield, legs, gloves, boots, ring, arrow]
+        return [(index, inventory_slot["quantity"]) for index, inventory_slot in enumerate(data) if inventory_slot["id"] == item_id]
 
-        NOTE: Socket may be bugged with -1's in the middle of the data even all equipment slots are filled
+    def get_equipped_item_quantity(self, item_id: int) -> int:
         """
-        data = self.__do_get(endpoint=self.equip_endpoint)
+        Checks for the quantity of an equipped item.
+        Args:
+                item_id: The ID of the item to check for.
+        Returns:
+                The quantity of the item equipped, or 0 if not equipped.
+        """
+        try:
+            data = self.__do_get(endpoint=self.equip_endpoint)
+        except SocketError as e:
+            print(e)
+            return None
+
         return [equipment_id["id"] for equipment_id in data]
 
     def convert_player_position_to_pixels(self):
@@ -357,9 +374,6 @@ if __name__ == "__main__":
     import item_ids as ids
 
     api = MorgHTTPSocket()
-
-    id_logs = 1511
-    id_bones = 526
 
     # Note: Making API calls in succession too quickly can result in issues
     while True:
@@ -387,9 +401,9 @@ if __name__ == "__main__":
 
         # Inventory Data
         if True:
-            print(f"Are logs in inventory?: {api.get_if_item_in_inv(ids.logs)}")
-            print(f"Find amount of change in inv: {api.get_inv_item_stack_amount(ids.coins)}")
-            print(f"Get position of all bones in inv: {api.get_inv_item_indices(ids.BONES)}")
+            print(f"Are logs in inventory?: {api.get_if_item_in_inv(item_id=1511)}")
+            print(f"Find logs in inv: {api.find_item_in_inv(item_id=1511)}")
+            print(f"Get position of all bones in inv: {api.get_inv_item_indices(id=[526])}")
 
         # Wait for XP to change
         if False:
@@ -401,6 +415,16 @@ if __name__ == "__main__":
                 print("Gained xp!")
             else:
                 print("No xp gained.")
+
+        # Equipment Data
+        if False:
+            print(f"Is bronze axe equipped?: {api.get_is_item_equipped(ids.BRONZE_AXE)}")
+            print(f"Are there any ring of duelings equipped? {api.get_is_item_equipped(ids.rods)}")
+            print(f"How many bronze arrows equipped?: {api.get_equipped_item_quantity(ids.BRONZE_ARROW)}")
+
+        # Chatbox Data
+        if True:
+            print(f"Latest chat message: {api.get_latest_chat_message()}")
 
         time.sleep(2)
 

@@ -14,10 +14,7 @@ from utilities.api.status_socket import StatusSocket
 class OSRSCombat(OSRSBot, launcher.Launchable):
     def __init__(self):
         bot_title = "Combat"
-        description = (
-            "This bot kills NPCs. Position your character near some NPCs and highlight them. After setting this bot's options, please launch RuneLite with the"
-            " button on the right."
-        )
+        description = "This bot kills NPCs. Position your character near some NPCs and highlight them.\nTHIS SCRIPT IS AN EXAMPLE, DO NOT USE LONGTERM."
         super().__init__(bot_title=bot_title, description=description)
         self.running_time: int = 1
         self.loot_items: str = ""
@@ -50,13 +47,21 @@ class OSRSCombat(OSRSBot, launcher.Launchable):
         self.options_set = True
 
     def launch_game(self):
+        """
+        This is a somewhat impractical way of modifying a properties file prior to launching RuneLite.
+        In this example, we make a copy of the default settings file, modify it according to the user's
+        option selections, and then launch RuneLite with the modified settings file. Since RuneLite 1.9.11,
+        it's likely more efficient to use the Profile Manager to modify settings on the fly.
+        """
         if launcher.is_program_running("RuneLite"):
             self.log_msg("RuneLite is already running. Please close it and try again.")
             return
+
         # Make a copy of the default settings and save locally
-        src = launcher.runelite_settings_folder.joinpath("osrs_settings.properties")
+        src = launcher.RL_SETTINGS_FOLDER_PATH.joinpath("osrs_settings.properties")
         dst = Path(__file__).parent.joinpath("custom_settings.properties")
         shutil.copy(str(src), str(dst))
+
         # Modify the highlight list
         loot_items = self.capitalize_loot_list(self.loot_items, to_list=False)
         with dst.open() as f:
@@ -66,8 +71,15 @@ class OSRSCombat(OSRSBot, launcher.Launchable):
                 lines[i] = f"grounditems.highlightedItems={loot_items}\n"
         with dst.open("w") as f:
             f.writelines(lines)
+
         # Launch the game
-        launcher.launch_runelite_with_settings(self, dst)
+        launcher.launch_runelite(
+            properties_path=dst,
+            game_title=self.game_title,
+            use_profile_manager=True,  # Important for games that use the new Profile Manager RL feature
+            profile_name="OSBCCombat",  # Supply a profile name if you'd like to save it to the Profile Manager
+            callback=self.log_msg,
+        )
 
     def main_loop(self):
         self.log_msg("WARNING: This script is for testing and may not be safe for personal use. Please modify it to suit your needs.")
@@ -162,4 +174,4 @@ class OSRSCombat(OSRSBot, launcher.Launchable):
     def __logout(self, msg):
         self.log_msg(msg)
         self.logout()
-        self.set_status(BotStatus.STOPPED)
+        self.stop()

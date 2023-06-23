@@ -65,6 +65,48 @@ class StatusSocket:
         """
         return player_data["tick"]
 
+    def get_real_level(self, skill_name):
+        """
+        Fetches the real level of a skill.
+        Args:
+            skill_name: The name of the skill to check (must be all caps).
+        Example:
+            >>> print(api_status.get_real_level("ATTACK"))
+        """
+        return next(
+            (skill["realLevel"] for skill in player_data["skills"] if skill["skillName"] == skill_name),
+            None,
+        )
+
+    def get_boosted_level(self, skill_name):
+        """
+        Fetches boosted level of a skill.
+        Args:
+            skill_name: The name of the skill to check (must be all caps).
+        Example:
+            >>> print(api_status.get_boosted_level("ATTACK"))
+        """
+        return next(
+            (skill["boostedLevel"] for skill in player_data["skills"] if skill["skillName"] == skill_name),
+            None,
+        )
+
+    def get_is_boosted(self, skill_name) -> bool:
+        """
+        Compares real level to boosted level of a skill.
+        Args:
+            skill_name: The name of the skill to check (must be all caps).
+        Returns:
+            True if boosted level is greater than real level
+        Example:
+            >>> print(api_status.get_is_boosted("ATTACK"))
+        """
+        real_level = self.get_real_level(skill_name)
+        boosted_level = self.get_boosted_level(skill_name)
+        if real_level is not None and boosted_level is not None:
+            return boosted_level > real_level
+        return False
+
     def get_run_energy(self) -> int:
         """
         Gets the player's current run energy.
@@ -80,6 +122,14 @@ class StatusSocket:
                 True if the player's inventory is full, False otherwise.
         """
         return len(player_data["inventory"]) >= 28
+
+    def get_is_inv_empty(self) -> bool:
+        """
+        Checks if player's inventory is empty.
+        Returns:
+                True if the player's inventory is empty, False otherwise.
+        """
+        return len(player_data["inventory"]) == 0
 
     def get_inv(self) -> list:
         """
@@ -133,6 +183,9 @@ class StatusSocket:
         checks if they are performing an action animation (skilling, combat, etc).
         Returns:
                 True if the player is idle, False otherwise.
+        Notes:
+                If you have the option, use MorgHTTPClient's idle check function instead. This one
+                does not consider movement animations.
         """
         # run a loop for 0.6 second
         start_time = time.time()
@@ -182,6 +235,9 @@ if __name__ == "__main__":
     while True:
         # api.get_PlayerData()
         time.sleep(api.gameTick)
+        print(f"Real Strength Level: {api.get_real_level('STRENGTH')}")
+        print(f"Boosted Strength Level: {api.get_boosted_level('STRENGTH')}")
+        print(f"Is Strength boosted?: {api.get_is_boosted('STRENGTH')}")
         print(f"Run Energy: {api.get_run_energy()}")
         print(f"Is Inventory Full: {api.get_is_inv_full()}")
         print(f"Inventory: {api.get_inv()}")
